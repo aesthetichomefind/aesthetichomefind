@@ -1,0 +1,14 @@
+{
+  "name": "aesthetichomefind",
+  "version": "0.1.0",
+  "private": true,
+  "description": "AestheticHomeFind - static home-finds discovery website",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "node scripts/build/build.js",
+    "dev": "node scripts/build/build.js && node scripts/build/dev-server.js"
+  }
+}

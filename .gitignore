@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Secrets and local environment files (never commit these)
+.env
+.env.*
+*.pem
+*.key
+
+# Logs
+npm-debug.log*
+*.log
+
+# Operating system files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+
+
+# Generated build output (created by npm run build)
+dist/
