@@ -2,6 +2,7 @@
 
 Static, GitHub Pages-compatible home-finds discovery website. Visitors discover
 real home products and click through to Amazon via affiliate links.
+real home products and click through to Amazon via affiliate links.
 Instagram: @AestheticHomeFind
 
 - Stack: HTML5, CSS3, vanilla JavaScript (no frontend framework)
@@ -97,3 +98,24 @@ One line per completed session: number, date, commit message, open notes.
 - Real contact method (Session 13)
 - Amazon Special Links and permitted images (Session 27)
 - Final domain (Session 27)
+
+
+## Responsive policy
+
+Applies to every session. Mobile-first CSS; wider layouts are added with `min-width` media queries.
+Breakpoints follow layout needs (`40em` tablet, `52em` two-column), not device names.
+Before every commit, check 320, 390, 768, 1024, 1440 and 1920 px widths: no horizontal scroll,
+no cramped cards, tap targets at least 44px, images with explicit width and height.
+
+
+- Session 03 | 2026-09-30 | `feat: add site shell with header, footer and mobile menu (Session 03)` | Open: Categories link goes to `/#categories` until Session 06/08. Search icon links to `/shop/` until Session 09. Stub pages (Shop, Guides, About, Contact, Privacy Policy, Affiliate Disclosure, Terms) say "built in a later session" and are replaced in Sessions 08, 12 and 13. Text wordmark in use until the logo file is added (Session 20).
+
+
+## Site shell (Session 03)
+
+Header and footer are written once in `scripts/build/templates/` (`layout.html`, `header.html`, `footer.html`)
+and added to every page by `scripts/build/build.js`. Navigation links live in `scripts/build/nav.js`.
+Site-wide text (brand name, Instagram URL, Amazon disclosure) lives in `data/site.json`.
+Every internal URL goes through `url()` in `scripts/build/lib.js`; for a GitHub project site build with
+`BASE_PATH=/repo-name`. A template typo such as `{{yeer}}` fails the build with a clear message.
+The mobile menu needs JavaScript (`js/app.js`); without it `css/no-js.css` shows the links as a plain list.

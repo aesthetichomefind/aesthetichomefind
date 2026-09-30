@@ -100,3 +100,196 @@
 /* ---------- Divider with heart (echoes the logo) ---------- */
 .rule-heart { display: flex; align-items: center; gap: var(--space-4); color: var(--color-accent); }
 .rule-heart::before, .rule-heart::after { content: ""; flex: 1; border-top: 1px solid var(--color-accent); }
+
+
+/* =====================================================================
+   Site shell (Session 03): header, navigation, mobile menu, footer
+   Mobile-first. Desktop navigation starts at 52em.
+   ===================================================================== */
+
+/* ---------- Icon buttons ---------- */
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text);
+  text-decoration: none;
+  transition: background-color var(--transition);
+}
+.icon-btn:hover { background: var(--color-accent-soft); color: var(--color-text); }
+
+/* ---------- Header ---------- */
+.site-header {
+  position: relative;
+  z-index: 20;
+  background: var(--color-surface);
+  border-bottom: var(--border-thin);
+}
+.site-header__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 4rem;
+}
+
+.brand {
+  margin-right: auto;
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  line-height: 1;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  text-decoration: none;
+}
+.brand:hover { color: var(--color-primary); }
+
+.site-header__actions { display: flex; align-items: center; }
+
+/* Menu button with a CSS-drawn icon (three lines -> X) */
+.menu-toggle__icon,
+.menu-toggle__icon::before,
+.menu-toggle__icon::after {
+  display: block;
+  width: 1.25rem;
+  height: 2px;
+  border-radius: 1px;
+  background: currentColor;
+  transition: transform var(--transition), background-color var(--transition);
+}
+.menu-toggle__icon { position: relative; }
+.menu-toggle__icon::before,
+.menu-toggle__icon::after { content: ""; position: absolute; left: 0; }
+.menu-toggle__icon::before { top: -6px; }
+.menu-toggle__icon::after  { top: 6px; }
+.menu-toggle[aria-expanded="true"] .menu-toggle__icon { background: transparent; }
+.menu-toggle[aria-expanded="true"] .menu-toggle__icon::before { transform: translateY(6px) rotate(45deg); }
+.menu-toggle[aria-expanded="true"] .menu-toggle__icon::after  { transform: translateY(-6px) rotate(-45deg); }
+
+/* Instagram icon in the bar is desktop-only (mobile has it inside the menu) */
+.site-header__instagram { display: none; }
+
+/* Navigation: mobile panel */
+.site-nav {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  padding: var(--space-2) var(--gutter) var(--space-5);
+  background: var(--color-surface);
+  border-bottom: var(--border-thin);
+  box-shadow: var(--shadow-md);
+}
+.site-nav.is-open { display: block; }
+
+.site-nav__list { list-style: none; margin: 0; padding: 0; }
+.site-nav__list a {
+  display: flex;
+  align-items: center;
+  min-height: 3rem;
+  border-bottom: var(--border-thin);
+  font-size: var(--text-lg);
+  color: var(--color-text);
+  text-decoration: none;
+}
+.site-nav__list li:last-child a { border-bottom: 0; }
+.site-nav__list a:hover { color: var(--color-accent-text); }
+.site-nav__list a[aria-current="page"] {
+  color: var(--color-primary);
+  font-weight: var(--weight-semibold);
+}
+
+/* Navigation: desktop bar */
+@media (min-width: 52em) {
+  .site-header__bar { gap: var(--space-6); }
+  .brand { margin-right: 0; }
+
+  .menu-toggle,
+  .site-nav__social { display: none; }
+  .site-header__instagram { display: inline-flex; }
+
+  .site-nav {
+    display: block;
+    position: static;
+    margin-right: auto;
+    padding: 0;
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+  .site-nav__list { display: flex; gap: var(--space-5); }
+  .site-nav__list a {
+    min-height: 2.75rem;
+    border-bottom: 0;
+    font-size: var(--text-sm);
+    font-weight: var(--weight-medium);
+  }
+  .site-nav__list a[aria-current="page"] {
+    font-weight: var(--weight-medium);
+    text-decoration: underline;
+    text-decoration-color: var(--color-accent);
+    text-decoration-thickness: 2px;
+    text-underline-offset: 0.5em;
+  }
+}
+
+/* ---------- Footer ---------- */
+.site-footer {
+  margin-top: var(--space-8);
+  padding-top: var(--space-7);
+  background: var(--color-surface-soft);
+  border-top: var(--border-thin);
+  font-size: var(--text-sm);
+}
+.site-footer__grid { display: grid; gap: var(--space-6); }
+.site-footer__name {
+  font-family: var(--font-display);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+}
+.site-footer__blurb { margin-block: var(--space-2) var(--space-3); color: var(--color-text-muted); }
+.site-footer__heading {
+  margin-bottom: var(--space-3);
+  font-family: var(--font-ui);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0;
+}
+.site-footer ul { list-style: none; margin: 0; padding: 0; }
+.site-footer li a {
+  display: inline-block;
+  padding-block: var(--space-2);
+  color: var(--color-text);
+  text-decoration: none;
+}
+.site-footer li a:hover,
+.site-footer li a[aria-current="page"] { color: var(--color-accent-text); text-decoration: underline; }
+
+.site-footer__legal {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin-top: var(--space-7);
+  padding-block: var(--space-5);
+  border-top: var(--border-thin);
+  color: var(--color-text-muted);
+}
+.site-footer__disclosure { color: var(--color-text); font-weight: var(--weight-medium); }
+
+@media (min-width: 40em) {
+  .site-footer__grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .site-footer__brand { grid-column: 1 / -1; }
+  .site-footer__legal { flex-direction: row; justify-content: space-between; align-items: baseline; gap: var(--space-5); }
+}
+@media (min-width: 52em) {
+  .site-footer__grid { grid-template-columns: 2fr 1fr 1fr; }
+  .site-footer__brand { grid-column: auto; }
+}

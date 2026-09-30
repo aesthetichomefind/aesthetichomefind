@@ -1,0 +1,14 @@
+/* no-js.css — loaded only inside <noscript>. Keeps navigation usable without JavaScript. */
+@media (max-width: 51.999em) {
+  .menu-toggle { display: none; }
+  .site-header__bar { flex-wrap: wrap; }
+  .site-nav {
+    position: static;
+    display: block;
+    flex-basis: 100%;
+    padding: 0 0 var(--space-3);
+    border: 0;
+    box-shadow: none;
+    background: transparent;
+  }
+}

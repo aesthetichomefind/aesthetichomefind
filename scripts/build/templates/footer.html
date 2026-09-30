@@ -1,0 +1,27 @@
+  <footer class="site-footer">
+    <div class="container">
+      <div class="site-footer__grid">
+        <div class="site-footer__brand">
+          <p class="site-footer__name">{{brandName}}</p>
+          <p class="site-footer__blurb">{{description}}</p>
+          <p><a href="{{instagramUrl}}" target="_blank" rel="noopener noreferrer">Instagram {{instagramHandle}}<span class="visually-hidden"> (opens in a new tab)</span></a></p>
+        </div>
+        <nav aria-label="Explore">
+          <h2 class="site-footer__heading">Explore</h2>
+          <ul role="list">
+        {{exploreLinks}}
+          </ul>
+        </nav>
+        <nav aria-label="Information">
+          <h2 class="site-footer__heading">Information</h2>
+          <ul role="list">
+        {{infoLinks}}
+          </ul>
+        </nav>
+      </div>
+      <div class="site-footer__legal">
+        <p class="site-footer__disclosure">{{disclosure}}</p>
+        <p class="site-footer__copy">&copy; {{year}} {{brandName}}</p>
+      </div>
+    </div>
+  </footer>
