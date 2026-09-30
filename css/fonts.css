@@ -1,0 +1,18 @@
+/* fonts.css — self-hosted fonts (variable, Latin subset).
+   Files live in /assets/fonts/. See README "Fonts" for the download steps.
+   Until the files exist, the fallback stacks in variables.css are used. */
+@font-face {
+  font-family: "Cormorant Garamond";
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url("../assets/fonts/cormorant-garamond-latin-wght-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url("../assets/fonts/inter-latin-wght-normal.woff2") format("woff2");
+}

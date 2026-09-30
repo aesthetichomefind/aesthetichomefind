@@ -1,0 +1,30 @@
+/* utilities.css — small single-purpose helpers. Loaded last. */
+.visually-hidden {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  margin: -1px; padding: 0; border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Skip link (used by the shell in Session 03) */
+.skip-link {
+  position: absolute;
+  left: var(--space-4);
+  top: -4rem;
+  z-index: 100;
+  padding: var(--space-3) var(--space-4);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-radius: var(--radius-md);
+}
+.skip-link:focus { top: var(--space-4); color: var(--color-on-primary); }
+
+.text-muted { color: var(--color-text-muted); }
+.text-center { text-align: center; }
+.font-display { font-family: var(--font-display); }
+.mt-0 { margin-top: 0; }
+.mt-4 { margin-top: var(--space-4); }
+.mt-6 { margin-top: var(--space-6); }
+[hidden] { display: none !important; }

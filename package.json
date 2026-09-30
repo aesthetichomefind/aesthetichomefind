@@ -9,6 +9,6 @@
   },
   "scripts": {
     "build": "node scripts/build/build.js",
-    "dev": "node scripts/build/build.js && node scripts/build/dev-server.js"
+    "dev": "node scripts/build/build.js --styleguide && node scripts/build/dev-server.js"
   }
 }
