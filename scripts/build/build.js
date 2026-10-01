@@ -7,10 +7,11 @@
 //   node scripts/build/build.js --styleguide    (dev build, adds /style-reference/)
 //   BASE_PATH=/repo-name node scripts/build/build.js   (GitHub project-site base path)
 const path = require("node:path");
-const { root, escapeHtml, readText } = require("./lib");
+const { root, escapeHtml } = require("./lib");
 const { validate } = require("./validate");
 const { loadModel, toClientProducts, toClientCategories } = require("./model");
 const { createPageRenderer } = require("./page");
+const { renderHomeContent } = require("./home");
 const { cleanDir, writePage, writeJson, copyFolders, copyFile } = require("./output");
 
 const args = process.argv.slice(2);
@@ -41,7 +42,7 @@ writePage(
     sitePath: "/",
     title: `${model.site.brandName} | ${model.site.tagline}`,
     description: model.site.description,
-    content: readText("pages", "home", "content.html"),
+    content: renderHomeContent(model),
   })
 );
 

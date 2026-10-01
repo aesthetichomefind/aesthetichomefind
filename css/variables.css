@@ -82,7 +82,7 @@
   --container-max: 72rem;
   --container-narrow: 44rem;
   --gutter: clamp(1rem, 4vw, 2rem);
-  --card-min: 10rem;          /* min product card width; drives 2/3/4 columns */
+  --card-min: 13rem;          /* min product card width; drives 3/4 columns on wider screens */
   --measure: 65ch;            /* comfortable reading width */
 
   /* ---- Motion ---- */

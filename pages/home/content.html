@@ -1,8 +1,27 @@
-    <section class="section">
-      <div class="container stack">
-        <h1>Beautiful finds for better spaces.</h1>
-        <p>Curated home decor, organization and everyday essentials worth discovering.</p>
-        <p class="text-muted">Site shell is in place. The full homepage is built in Session 06.</p>
+    <section class="hero">
+      <div class="container hero__inner">
+        <h1>{{tagline}}</h1>
+        <p class="hero__text">{{description}}</p>
+        <div class="hero__actions">
+          <a class="btn btn--primary" href="{{shopUrl}}">Explore Finds</a>
+          <a class="btn btn--secondary" href="#categories">Shop by Category</a>
+        </div>
       </div>
     </section>
-    
+
+{{categories}}
+
+{{latest}}
+
+{{featured}}
+
+{{guides}}
+
+    <section class="section instagram-cta" aria-labelledby="instagram-heading">
+      <div class="container container--narrow instagram-cta__inner">
+        <div class="rule-heart" aria-hidden="true">&#9829;</div>
+        <h2 id="instagram-heading">Follow {{instagramHandle}}</h2>
+        <p>See our latest finds and home ideas on Instagram.</p>
+        <a class="btn btn--secondary" href="{{instagramUrl}}" target="_blank" rel="noopener noreferrer">Follow on Instagram<span class="visually-hidden"> (opens in a new tab)</span></a>
+      </div>
+    </section>

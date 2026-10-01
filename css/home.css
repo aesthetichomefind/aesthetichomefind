@@ -1,0 +1,23 @@
+/* home.css — homepage-only sections: hero and Instagram call to action. */
+
+.hero { padding-block: var(--space-8) var(--space-7); text-align: center; }
+.hero__inner { max-width: 44rem; }
+.hero__text { margin: var(--space-4) auto 0; font-size: var(--text-lg); color: var(--color-text-muted); }
+
+.hero__actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  max-width: 20rem;
+  margin: var(--space-6) auto 0;
+}
+@media (min-width: 40em) {
+  .hero { padding-block: var(--space-9) var(--space-8); }
+  .hero__actions { flex-direction: row; justify-content: center; max-width: none; }
+}
+
+.instagram-cta { padding-bottom: 0; text-align: center; }
+.instagram-cta__inner { display: flex; flex-direction: column; align-items: center; gap: var(--space-3); }
+.instagram-cta__inner .rule-heart { width: 100%; max-width: 20rem; margin-bottom: var(--space-3); }
+.instagram-cta__inner p { margin-inline: auto; color: var(--color-text-muted); }
+.instagram-cta__inner .btn { margin-top: var(--space-2); }
