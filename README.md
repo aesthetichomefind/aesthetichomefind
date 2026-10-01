@@ -119,3 +119,47 @@ Site-wide text (brand name, Instagram URL, Amazon disclosure) lives in `data/sit
 Every internal URL goes through `url()` in `scripts/build/lib.js`; for a GitHub project site build with
 `BASE_PATH=/repo-name`. A template typo such as `{{yeer}}` fails the build with a clear message.
 The mobile menu needs JavaScript (`js/app.js`); without it `css/no-js.css` shows the links as a plain list.
+
+
+- Session 04 | 2026-10-01 | `feat: add content schema, sample content and validator (Session 04)` | Open: all 10 sample products use placeholder Amazon links and fake text (the validator warns until they are replaced, Session 27). `npm run validate` is not yet part of `npm run build` (Session 05). Price/rating/scarcity wording checks come in Session 14. Guide samples come in Session 12.
+
+## Content schema (Session 04)
+
+Check content any time with `npm run validate`. Before launch run `npm run validate -- --strict` (warnings then fail too).
+
+**Products**: `content/products/<slug>.md`. File name must equal the slug. Text between the `---` lines is the data; text below is the optional
+"why it caught our attention" note.
+
+| Field | Required | Notes |
+|---|---|---|
+| `id` | yes | unique, lowercase letters, numbers, hyphens |
+| `slug` | yes | unique, same as file name, used in the URL |
+| `title` | yes | |
+| `category` | yes | slug of a category in `content/categories/` |
+| `description` | yes | original text, no invented claims |
+| `image` | yes | path like `/assets/images/name.jpg`, file must exist |
+| `altText` | yes | describes the image (required for accessibility) |
+| `amazonUrl` | yes | your Amazon Special Link, full `https://` URL, never invented |
+| `publishedAt` | yes | date like `2026-09-15` |
+| `shortDescription` | no | card text, up to 160 characters |
+| `features` | no | list of short points |
+| `badge` | no | `New` or `Featured` |
+| `featured` | no | `true` or `false` |
+| `instagramUrl` | no | link to the Instagram post, must be instagram.com |
+| `tags` | no | list |
+| `additionalImages` | no | list of image paths |
+| `seoTitle`, `seoDescription` | no | up to 70 / 170 characters |
+| `draft` | no | `true` = not published yet, hidden everywhere |
+| `archived` | no | `true` = removed from the site, file kept for history |
+
+**Archive rule:** a product with `draft: true` or `archived: true` gets no page and appears nowhere (lists, search, related products, sitemap).
+Never delete a product file to hide it; set `archived: true` instead. Wiring this rule into the build happens in Session 05.
+
+**Categories**: `content/categories/<slug>.json` with `name`, `slug`, `description`, `order` (number, sets display order), and optional `image`, `seoTitle`, `seoDescription`.
+
+**Guides**: `content/guides/<slug>.md` with `title`, `slug`, `description`, `date`, and optional `draft`, `seoTitle`, `seoDescription`,
+`relatedProducts` (list of product slugs). The text below the front matter is the article.
+
+**Site settings**: `data/site.json` (brand name, tagline, description, Instagram handle and URL, Amazon disclosure, optional `socialLinks` list).
+
+Unknown field names are errors, so a typo like `ammazonUrl` is caught immediately. Sample content is clearly fake (titles start with "Sample:").
