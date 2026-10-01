@@ -12,6 +12,7 @@ const { validate } = require("./validate");
 const { loadModel, toClientProducts, toClientCategories } = require("./model");
 const { createPageRenderer } = require("./page");
 const { renderHomeContent } = require("./home");
+const { renderProductPage } = require("./product-page");
 const { cleanDir, writePage, writeJson, copyFolders, copyFile } = require("./output");
 
 const args = process.argv.slice(2);
@@ -45,6 +46,11 @@ writePage(
     content: renderHomeContent(model),
   })
 );
+
+// Product pages: one per published product (drafts and archived products get none)
+for (const product of model.products) {
+  writePage(dist, product.sitePath, renderPage({ sitePath: product.sitePath, ...renderProductPage(product, model) }));
+}
 
 // Temporary stub pages so navigation has no dead links (replaced in Sessions 08, 12, 13)
 const stubPages = [
