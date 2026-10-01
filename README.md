@@ -163,3 +163,30 @@ Never delete a product file to hide it; set `archived: true` instead. Wiring thi
 **Site settings**: `data/site.json` (brand name, tagline, description, Instagram handle and URL, Amazon disclosure, optional `socialLinks` list).
 
 Unknown field names are errors, so a typo like `ammazonUrl` is caught immediately. Sample content is clearly fake (titles start with "Sample:").
+
+
+- Session 05 | 2026-10-01 | `feat: add build pipeline with validation, content model and data files (Session 05)` | Open: product and category pages are generated in Sessions 07-08, the homepage content in Session 06. After editing content, stop the dev server (Ctrl+C) and run `npm run dev` again. Validation warnings (placeholder links) appear on every build until Session 27.
+
+
+| Command | What it does |
+|---|---|
+| `npm run validate` | Checks all content and settings, reports errors and warnings |
+| `npm run build` | Validates, then builds the site into `dist/`. Stops if content has errors |
+| `npm run build:strict` | Same, but warnings also stop the build (use before launch) |
+| `npm run dev` | Builds with the dev-only style reference page, then serves `dist/` at http://localhost:3000 (Ctrl+C to stop). Style reference: http://localhost:3000/style-reference/ |
+
+
+## Build pipeline (Session 05)
+
+`npm run build` runs these steps in order (code in `scripts/build/`):
+
+1. **Validate** (`validate.js`). Errors stop the build before `dist/` is touched, so a broken edit can never replace a working site.
+2. **Load** (`model.js`). Products with `draft: true` or `archived: true` are dropped. Products sort newest first, categories by `order`.
+3. **Pages** (`page.js`, `templates/`). Each page is wrapped in the shared header and footer. Pages can add extra tags to `<head>` through the `head` slot.
+4. **Data files** (`output.js`). `dist/data/products.json` and `dist/data/categories.json` are generated for search and filters.
+   They contain only what the browser needs (no Amazon links, features or notes) and all URLs already include the base path.
+   They are build output, not source files, so they are not stored in the `data/` folder and not committed.
+5. **Static files.** `css/`, `js/` and `assets/` are copied into `dist/`.
+
+Rebuild after any content change. Adding, editing, drafting, archiving or deleting a product file changes the output on the next build.
+

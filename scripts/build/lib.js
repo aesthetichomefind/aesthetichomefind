@@ -45,11 +45,4 @@ function readJson(...segments) {
   return JSON.parse(readText(...segments));
 }
 
-// Writes dist/<sitePath>/index.html (or dist/index.html for "/").
-function writePage(distDir, sitePath, html) {
-  const folder = path.join(distDir, sitePath);
-  fs.mkdirSync(folder, { recursive: true });
-  fs.writeFileSync(path.join(folder, "index.html"), html);
-}
-
-module.exports = { root, basePath, url, escapeHtml, render, readText, readJson, writePage };
+module.exports = { root, basePath, url, escapeHtml, render, readText, readJson };

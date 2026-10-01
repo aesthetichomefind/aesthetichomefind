@@ -9,6 +9,7 @@
   },
   "scripts": {
     "build": "node scripts/build/build.js",
+    "build:strict": "node scripts/build/build.js --strict",
     "validate": "node scripts/build/validate.js",
     "dev": "node scripts/build/build.js --styleguide && node scripts/build/dev-server.js"
   }
