@@ -13,6 +13,7 @@ const { loadModel, toClientProducts, toClientCategories } = require("./model");
 const { createPageRenderer } = require("./page");
 const { renderHomeContent } = require("./home");
 const { renderProductPage } = require("./product-page");
+const { renderShopPage, renderCategoryPage } = require("./listing-pages");
 const { cleanDir, writePage, writeJson, copyFolders, copyFile } = require("./output");
 
 const args = process.argv.slice(2);
@@ -52,9 +53,14 @@ for (const product of model.products) {
   writePage(dist, product.sitePath, renderPage({ sitePath: product.sitePath, ...renderProductPage(product, model) }));
 }
 
+// Shop page and one page per category (empty categories still get a page with an empty state)
+writePage(dist, "/shop/", renderPage({ sitePath: "/shop/", ...renderShopPage(model) }));
+for (const category of model.categories) {
+  writePage(dist, category.sitePath, renderPage({ sitePath: category.sitePath, ...renderCategoryPage(category, model) }));
+}
+
 // Temporary stub pages so navigation has no dead links (replaced in Sessions 08, 12, 13)
 const stubPages = [
-  { sitePath: "/shop/", title: "Shop" },
   { sitePath: "/guides/", title: "Guides" },
   { sitePath: "/about/", title: "About" },
   { sitePath: "/contact/", title: "Contact" },
@@ -93,5 +99,5 @@ if (withStyleguide) {
 }
 
 const hiddenNote = `${model.hidden.draft} draft, ${model.hidden.archived} archived hidden`;
-console.log(`Content: ${model.products.length} products published (${hiddenNote}), ${model.categories.length} categories`);
+console.log(`Content: ${model.products.length} products published (${hiddenNote}), ${model.categories.length} categories (shop + ${model.categories.length} category pages built)`);
 console.log(`Build complete: ${path.relative(root, dist)}/ created`);

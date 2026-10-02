@@ -1,0 +1,37 @@
+/* listing.css — Shop page and category pages.
+   Loaded only on those pages (through the page <head> slot). */
+
+.listing { padding-block: var(--space-5) var(--space-7); }
+
+.listing__header { display: grid; gap: var(--space-2); margin-block: var(--space-4) var(--space-5); }
+.listing__image {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  margin-bottom: var(--space-3);
+  background: var(--color-surface-soft);
+  border: var(--border-thin);
+  border-radius: var(--radius-lg);
+}
+.listing__title { font-size: var(--text-2xl); }
+.listing__intro { max-width: 40rem; color: var(--color-text-muted); }
+.listing__count { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+/* Category chips: wrap onto several lines on small phones, never scroll sideways */
+.listing__filters { margin-bottom: var(--space-5); scroll-margin-top: var(--space-4); }
+.chip-list { display: flex; flex-wrap: wrap; gap: var(--space-2); list-style: none; margin: 0; padding: 0; }
+
+.listing__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-thin);
+  border-radius: var(--radius-lg);
+}
+
+@media (min-width: 52em) {
+  .listing__title { font-size: var(--text-3xl, var(--text-2xl)); }
+}

@@ -3,8 +3,7 @@ const { url, escapeHtml } = require("./lib");
 
 const mainNav = [
   { label: "Shop", path: "/shop/" },
-  { label: "Categories", path: "/#categories" }, // becomes a menu in Session 08
-  { label: "Guides", path: "/guides/" },
+  { label: "Categories", path: "/shop/#categories" }, // category chips at the top of the Shop page  { label: "Guides", path: "/guides/" },
   { label: "About", path: "/about/" },
 ];
 
