@@ -1,0 +1,49 @@
+/* search.css — Search page form and messages.
+   Loaded only on the Search page (through the page <head> slot). */
+
+.search-form { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-bottom: var(--space-4); }
+.search-form__field { position: relative; flex: 1 1 100%; }
+.search-form .btn { width: 100%; min-height: 3rem; }
+
+.search-form__input {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0 3rem 0 var(--space-4);
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 1rem; /* 16px or more stops iPhones zooming in on focus */
+}
+.search-form__input::placeholder { color: var(--color-text-muted); opacity: 1; }
+.search-form__input::-webkit-search-cancel-button { -webkit-appearance: none; appearance: none; }
+.search-form__input:focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
+
+.search-form__clear {
+  position: absolute;
+  top: 50%;
+  right: var(--space-1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-text-muted);
+  transform: translateY(-50%);
+}
+.search-form__clear[hidden] { display: none; }
+.search-form__clear:hover { background: var(--color-accent-soft); color: var(--color-text); }
+
+.search-status { min-height: 1.5em; margin-bottom: var(--space-4); font-size: var(--text-sm); color: var(--color-text-muted); }
+.search-message { max-width: 40rem; color: var(--color-text-muted); }
+
+@media (min-width: 40em) {
+  .search-form { flex-wrap: nowrap; max-width: 40rem; }
+  .search-form__field { flex: 1 1 auto; }
+  .search-form .btn { width: auto; padding-inline: var(--space-6); }
+}

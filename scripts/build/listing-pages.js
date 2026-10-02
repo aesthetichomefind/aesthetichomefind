@@ -100,4 +100,4 @@ ${productsOrEmpty(inCategory, categories, "No finds in this category yet. Check 
   };
 }
 
-module.exports = { renderShopPage, renderCategoryPage };
+module.exports = { renderShopPage, renderCategoryPage, breadcrumb };

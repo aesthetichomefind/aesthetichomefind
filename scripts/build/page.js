@@ -24,7 +24,7 @@ function createPageRenderer(site) {
   return function renderPage({ sitePath, title, description, content, head = "" }) {
     const header = render(
       templates.header,
-      { ...shared, homeUrl: url("/"), searchUrl: url("/shop/"), mainLinks: nav.mainLinks(sitePath) },
+    { ...shared, homeUrl: url("/"), searchUrl: url("/search/"), mainLinks: nav.mainLinks(sitePath) },
       "header.html"
     );
     const footer = render(

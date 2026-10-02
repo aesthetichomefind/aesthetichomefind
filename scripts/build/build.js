@@ -14,6 +14,7 @@ const { createPageRenderer } = require("./page");
 const { renderHomeContent } = require("./home");
 const { renderProductPage } = require("./product-page");
 const { renderShopPage, renderCategoryPage } = require("./listing-pages");
+const { renderSearchPage } = require("./search-page");
 const { cleanDir, writePage, writeJson, copyFolders, copyFile } = require("./output");
 
 const args = process.argv.slice(2);
@@ -58,6 +59,9 @@ writePage(dist, "/shop/", renderPage({ sitePath: "/shop/", ...renderShopPage(mod
 for (const category of model.categories) {
   writePage(dist, category.sitePath, renderPage({ sitePath: category.sitePath, ...renderCategoryPage(category, model) }));
 }
+
+// Search page (results are drawn in the browser by js/search.js)
+writePage(dist, "/search/", renderPage({ sitePath: "/search/", ...renderSearchPage(model) }));
 
 // Temporary stub pages so navigation has no dead links (replaced in Sessions 08, 12, 13)
 const stubPages = [
