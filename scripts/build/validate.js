@@ -23,7 +23,7 @@ const GUIDE = {
   required: ["title", "slug", "description", "date"],
   optional: ["draft", "seoTitle", "seoDescription", "relatedProducts"],
 };
-const SITE_REQUIRED = ["brandName", "tagline", "description", "instagramHandle", "instagramUrl", "amazonDisclosure"];
+const SITE_REQUIRED = ["brandName", "tagline", "description", "instagramHandle", "instagramUrl", "amazonDisclosure", "contactEmail"];
 
 const isText = (v) => typeof v === "string" && v.trim() !== "";
 const isTextList = (v) => Array.isArray(v) && v.every(isText);
@@ -82,7 +82,8 @@ function validate(root) {
     error(site.file, site.error);
   } else {
     for (const key of SITE_REQUIRED) if (!isText(site.data[key])) error(site.file, `missing required field "${key}"`);
-    if (isText(site.data.instagramUrl) && !isInstagramUrl(site.data.instagramUrl)) error(site.file, '"instagramUrl" must be an https://www.instagram.com/... link');
+        if (isText(site.data.instagramUrl) && !isInstagramUrl(site.data.instagramUrl)) error(site.file, '"instagramUrl" must be an https://www.instagram.com/... link');
+    if (isText(site.data.contactEmail) && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(site.data.contactEmail)) error(site.file, '"contactEmail" must be an email address like name@example.com');
     if (site.data.socialLinks !== undefined) {
       if (!Array.isArray(site.data.socialLinks)) error(site.file, '"socialLinks" must be a list');
       else site.data.socialLinks.forEach((link, i) => {

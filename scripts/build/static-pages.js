@@ -45,6 +45,7 @@ function placeholderValues(site) {
     disclosure: escapeHtml(site.amazonDisclosure),
     instagramUrl: escapeHtml(site.instagramUrl),
     instagramHandle: escapeHtml(site.instagramHandle),
+    contactEmail: escapeHtml(site.contactEmail || ""),
     aboutUrl: escapeHtml(url("/about/")),
     contactUrl: escapeHtml(url("/contact/")),
     privacyUrl: escapeHtml(url("/privacy-policy/")),
