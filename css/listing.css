@@ -84,3 +84,5 @@
   font-size: var(--text-sm);
   color: var(--color-text-muted);
 }
+
+.filter-bar__status:empty { display: none; }
