@@ -15,6 +15,7 @@ const { renderHomeContent } = require("./home");
 const { renderProductPage } = require("./product-page");
 const { renderShopPage, renderCategoryPage } = require("./listing-pages");
 const { renderSearchPage } = require("./search-page");
+const { staticPages, renderStaticPage, countOwnerTodos } = require("./static-pages");
 const { cleanDir, writePage, writeJson, copyFolders, copyFile } = require("./output");
 
 const args = process.argv.slice(2);
@@ -28,6 +29,16 @@ for (const message of result.errors) console.error(`ERROR   ${message}`);
 for (const message of result.warnings) console.warn(`WARNING ${message}`);
 if (result.errors.length > 0 || (strict && result.warnings.length > 0)) {
   console.error("\nBuild stopped: fix the problems above. You can re-check content any time with: npm run validate");
+  process.exit(1);
+}
+
+// Owner placeholders (TODO-OWNER) in the page texts are launch blockers.
+const ownerTodos = countOwnerTodos();
+if (ownerTodos > 0) {
+  console.warn(`WARNING ${ownerTodos} TODO-OWNER placeholder(s) in pages/. Search the project for TODO-OWNER and replace them before launch.`);
+}
+if (strict && ownerTodos > 0) {
+  console.error("\nBuild stopped: TODO-OWNER placeholders are still in pages/. Replace them, then build again.");
   process.exit(1);
 }
 
@@ -63,15 +74,16 @@ for (const category of model.categories) {
 // Search page (results are drawn in the browser by js/search.js)
 writePage(dist, "/search/", renderPage({ sitePath: "/search/", ...renderSearchPage(model) }));
 
-// Temporary stub pages so navigation has no dead links (replaced in Sessions 08, 12, 13)
+// About, Contact, Privacy Policy, Affiliate Disclosure and Terms (text in pages/<name>/content.html)
+for (const page of staticPages) {
+  writePage(dist, page.sitePath, renderPage({ sitePath: page.sitePath, ...renderStaticPage(page, model) }));
+}
+
+// Temporary stub page so navigation has no dead link (replaced in Session 12)
 const stubPages = [
   { sitePath: "/guides/", title: "Guides" },
-  { sitePath: "/about/", title: "About" },
-  { sitePath: "/contact/", title: "Contact" },
-  { sitePath: "/privacy-policy/", title: "Privacy Policy" },
-  { sitePath: "/affiliate-disclosure/", title: "Affiliate Disclosure" },
-  { sitePath: "/terms/", title: "Terms" },
 ];
+
 for (const page of stubPages) {
   const content = `    <section class="section">
       <div class="container container--narrow stack">
