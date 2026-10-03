@@ -1,10 +1,11 @@
 // Builds the homepage content from the content model.
 // Static wording (hero buttons, Instagram section) lives in pages/home/content.html.
 const { url, escapeHtml, render, readText } = require("./lib");
-const { productGrid, categoryGrid } = require("./components");
+const { productGrid, categoryGrid, guideGrid } = require("./components");
 
 const LATEST_COUNT = 8; // newest products shown on the homepage
 const FEATURED_COUNT = 4; // products marked featured: true shown on the homepage
+const GUIDES_COUNT = 3; // newest guides shown on the homepage
 
 function section({ id, heading, linkHtml = "", body, modifier = "" }) {
   return `    <section class="section${modifier}" aria-labelledby="${id}-heading">
@@ -41,6 +42,19 @@ function renderHomeContent(model) {
         body: '        <p class="text-muted">New finds are on the way. Check back soon.</p>',
       });
 
+  // Helpful Guides: the section disappears when there are no published guides
+  const homeGuides = (model.guides || []).slice(0, GUIDES_COUNT);
+  const guidesSection = homeGuides.length
+    ? section({
+        id: "guides",
+        heading: "Helpful Guides",
+        linkHtml: `\n          <a href="${escapeHtml(url("/guides/"))}">All guides &rarr;</a>`,
+        body: guideGrid(homeGuides, 3),
+      })
+    : "";
+
+
+
   const featured = products.filter((p) => p.featured).slice(0, FEATURED_COUNT);
   const featuredSection = featured.length
     ? section({ id: "featured", heading: "Featured Finds", modifier: " section--soft", body: productGrid(featured, categories) })
@@ -57,7 +71,7 @@ function renderHomeContent(model) {
       categories: categoriesSection,
       latest: latestSection,
       featured: featuredSection,
-      guides: "", // "Helpful Guides" section is added in Session 12
+      guides: guidesSection,
     },
     "pages/home/content.html"
   );

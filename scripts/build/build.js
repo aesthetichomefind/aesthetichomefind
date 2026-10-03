@@ -16,6 +16,8 @@ const { renderProductPage } = require("./product-page");
 const { renderShopPage, renderCategoryPage } = require("./listing-pages");
 const { renderSearchPage } = require("./search-page");
 const { staticPages, renderStaticPage, countOwnerTodos } = require("./static-pages");
+const { renderGuidesIndex, renderGuidePage } = require("./guide-pages");
+const { auditLinks } = require("./check-links");
 const { cleanDir, writePage, writeJson, copyFolders, copyFile } = require("./output");
 
 const args = process.argv.slice(2);
@@ -78,30 +80,12 @@ writePage(dist, "/search/", renderPage({ sitePath: "/search/", ...renderSearchPa
 for (const page of staticPages) {
   writePage(dist, page.sitePath, renderPage({ sitePath: page.sitePath, ...renderStaticPage(page, model) }));
 }
-
-// Temporary stub page so navigation has no dead link (replaced in Session 12)
-const stubPages = [
-  { sitePath: "/guides/", title: "Guides" },
-];
-
-for (const page of stubPages) {
-  const content = `    <section class="section">
-      <div class="container container--narrow stack">
-        <h1>${escapeHtml(page.title)}</h1>
-        <p class="text-muted">This page is built in a later session.</p>
-      </div>
-    </section>`;
-  writePage(
-    dist,
-    page.sitePath,
-    renderPage({
-      sitePath: page.sitePath,
-      title: `${page.title} | ${model.site.brandName}`,
-      description: model.site.description,
-      content,
-    })
-  );
+// Guides: the list page and one page per published guide (drafts get none)
+writePage(dist, "/guides/", renderPage({ sitePath: "/guides/", ...renderGuidesIndex(model) }));
+for (const guide of model.guides) {
+  writePage(dist, guide.sitePath, renderPage({ sitePath: guide.sitePath, ...renderGuidePage(guide, model) }));
 }
+
 
 // 4) Browser data (used by search and filters in later sessions)
 writeJson(dist, "data/products.json", toClientProducts(model.products));
@@ -114,6 +98,17 @@ if (withStyleguide) {
   console.log("Dev: /style-reference/ included");
 }
 
+// 6) Link audit on the finished pages. Any problem stops the build.
+const audit = auditLinks(dist);
+for (const problem of audit.problems) console.error(`LINK    ${problem}`);
+if (audit.problems.length > 0) {
+  console.error("\nBuild stopped: fix the links above. Amazon links must be built with amazonLink() (scripts/build/links.js).");
+  process.exit(1);
+}
+console.log(`Link audit: ${audit.amazonLinks} Amazon link(s) checked, all correct`);
+
+
+
 const hiddenNote = `${model.hidden.draft} draft, ${model.hidden.archived} archived hidden`;
-console.log(`Content: ${model.products.length} products published (${hiddenNote}), ${model.categories.length} categories (shop + ${model.categories.length} category pages built)`);
+console.log(`Content: ${model.products.length} products published (${hiddenNote}), ${model.categories.length} categories (shop + ${model.categories.length} category pages built), ${model.guides.length} guides published`);
 console.log(`Build complete: ${path.relative(root, dist)}/ created`);

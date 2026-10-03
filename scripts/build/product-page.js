@@ -99,6 +99,22 @@ function relatedSection(product, model) {
 ${productGrid(items, model.categories)}
       </section>`;
 }
+// "Read the guide" block: published guides that list this product in relatedProducts (max 2).
+// Returns an empty string when there is none, so no empty heading appears.
+function guideSection(product, model) {
+  const guides = model.guides.filter((g) => g.relatedProducts.includes(product.slug)).slice(0, 2);
+  if (guides.length === 0) return "";
+  const items = guides
+    .map((g) => `          <li><a href="${escapeHtml(url(g.sitePath))}">${escapeHtml(g.title)}</a></li>`)
+    .join("\n");
+  return `<section class="guide-links" aria-labelledby="guide-heading">
+        <h2 class="product__heading" id="guide-heading">${guides.length === 1 ? "Read the guide" : "Read the guides"}</h2>
+        <ul class="guide-links__list" role="list">
+${items}
+        </ul>
+      </section>`;
+}
+
 
 function renderProductPage(product, model) {
   const category = model.categories.find((c) => c.slug === product.category);
@@ -118,7 +134,7 @@ function renderProductPage(product, model) {
       cta: cta(product, model.site),
       instagram: instagram(product),
       related: relatedSection(product, model),
-      guide: "", // "Read the guide" is added in Session 12
+      guide: guideSection(product, model),
     },
     "pages/product/content.html"
   );

@@ -53,4 +53,31 @@ function categoryGrid(categories, products) {
   return `    <ul class="category-grid" role="list">\n${tiles}\n    </ul>`;
 }
 
-module.exports = { productCard, productGrid, categoryGrid };
+// "3 October 2026". Always uses the date as written in the file (no time zone surprises).
+function formatDate(value) {
+  const date = new Date(Date.parse(value));
+  if (Number.isNaN(date.getTime())) return String(value);
+  return date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+}
+
+// "2026-10-03" for the <time datetime> attribute
+function isoDate(value) {
+  return String(value).slice(0, 10);
+}
+
+// level: heading level of the title (3 under a section heading, 2 under the page title)
+function guideCard(guide, level = 3) {
+  const tag = `h${level}`;
+  return `    <article class="guide-card">
+      <p class="guide-card__date"><time datetime="${escapeHtml(isoDate(guide.date))}">${escapeHtml(formatDate(guide.date))}</time></p>
+      <${tag} class="guide-card__title"><a class="guide-card__link" href="${escapeHtml(url(guide.sitePath))}">${escapeHtml(guide.title)}</a></${tag}>
+      <p class="guide-card__text">${escapeHtml(guide.description)}</p>
+      <span class="guide-card__cta">Read the guide</span>
+    </article>`;
+}
+
+function guideGrid(guides, level = 3) {
+  return `    <div class="guide-grid">\n${guides.map((g) => guideCard(g, level)).join("\n")}\n    </div>`;
+}
+
+module.exports = { productCard, productGrid, categoryGrid, guideCard, guideGrid, formatDate, isoDate };

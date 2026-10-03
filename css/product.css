@@ -62,3 +62,9 @@
   padding-top: var(--space-6);
   border-top: var(--border-thin);
 }
+
+
+
+/* "Read the guide" links at the bottom of a product page */
+.guide-links { margin-top: var(--space-6); }
+.guide-links__list { display: grid; gap: var(--space-2); margin: 0; padding: 0; list-style: none; }

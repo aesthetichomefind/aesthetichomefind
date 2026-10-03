@@ -362,3 +362,28 @@
 .breadcrumb a { color: var(--color-text-muted); }
 .breadcrumb a:hover { color: var(--color-text); }
 .breadcrumb [aria-current="page"] { color: var(--color-text); }
+
+
+/* Guide cards (homepage "Helpful Guides" and /guides/) */
+.guide-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 1fr));
+  gap: var(--space-4);
+}
+.guide-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding: var(--space-5);
+  background: var(--color-surface);
+  border: var(--border-thin);
+  border-radius: var(--radius-lg);
+}
+.guide-card__date { margin: 0; font-size: var(--text-sm); color: var(--color-text-muted); }
+.guide-card__title { margin: 0; }
+.guide-card__text { margin: 0; color: var(--color-text-muted); }
+.guide-card__cta { margin-top: auto; padding-top: var(--space-2); font-weight: 600; }
+/* The whole card is clickable through its title link */
+.guide-card__link::after { content: ""; position: absolute; inset: 0; border-radius: var(--radius-lg); }
+.guide-card__link:focus-visible::after { outline: 2px solid var(--color-accent); outline-offset: 2px; }

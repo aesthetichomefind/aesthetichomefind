@@ -6,8 +6,27 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { loadProducts, loadGuides, loadCategories, loadSite } = require("./content");
+const { isAmazonHost, isShortAmazonHost } = require("./links");
 
 const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+// Words and numbers that must not be written into product or guide text.
+// Hard claims are errors: prices, discounts, ratings and stock change often and we never
+// have verified data for them. Soft claims are warnings: check that the sentence is true.
+const HARD_CLAIMS = [
+  { label: "a price", re: /(?:[₹$€£]|\b(?:rs|inr|usd|eur)\.?)\s?\d/i },
+  { label: "a discount", re: /\d\s?%\s?off\b|\bsave\s+(?:up to\s+)?\d+\s?%/i },
+  { label: "a rating", re: /\b\d(?:\.\d)?\s?(?:\/\s?5|out of 5)\b|\b\d(?:\.\d)?\s?stars?\b/i },
+  { label: "a stock count", re: /\bonly\s+\d+\s+(?:left|remaining|in stock)\b|\b\d+\s+(?:left|remaining)\b/i },
+  { label: "a review or sales count", re: /\b\d[\d,.]*\+?\s?(?:reviews?|ratings?|customers?|buyers?|sold)\b/i },
+];
+const SOFT_CLAIMS = [
+  { label: "sale or deal wording", re: /\b(?:on sale|sale price|flash sale|hot deal|deal of the day|discounts?|bargain|cheapest|cheap)\b/i },
+  { label: "popularity wording", re: /\b(?:best[\s-]?seller|top[\s-]rated|number one|best ever|viral)\b/i },
+  { label: "urgency or stock wording", re: /\b(?:limited[\s-]time|hurry|act now|while (?:stocks?|supplies) last|in stock|out of stock|sold out|selling fast)\b/i },
+  { label: "price, rating or review wording", re: /\b(?:prices?|ratings?|reviews?|reviewers?)\b/i },
+];
+
 const DATE = /^\d{4}-\d{2}-\d{2}(?:[T ]\d{2}:\d{2}(?::\d{2}(?:\.\d+)?)?(?:Z|[+-]\d{2}:?\d{2})?)?$/;
 
 const PRODUCT = {
@@ -76,6 +95,31 @@ function validate(root) {
     }
   }
 
+    function checkClaims(file, field, text) {
+    if (!isText(text)) return;
+    for (const rule of HARD_CLAIMS) {
+      const m = text.match(rule.re);
+      if (m) error(file, `"${field}" contains ${rule.label} ("${m[0].trim()}"). Prices, discounts, ratings and stock change often, so they are never written on this site; send visitors to Amazon for current details`);
+    }
+    for (const rule of SOFT_CLAIMS) {
+      const m = text.match(rule.re);
+      if (m) warn(file, `"${field}" contains ${rule.label} ("${m[0].trim()}"). Make sure it is true and not something we cannot verify`);
+    }
+  }
+
+  function checkAmazonLink(file, value) {
+    const link = new URL(value);
+    if (!isAmazonHost(link.hostname)) {
+      error(file, `"amazonUrl" must be an Amazon link (amazon.* or amzn.*), got "${link.hostname}"`);
+      return;
+    }
+    if (isShortAmazonHost(link.hostname)) return; // short Special Links keep the tag inside Amazon's redirect
+    if (!link.searchParams.get("tag")) {
+      warn(file, '"amazonUrl" has no affiliate tag (tag=...), so it may not earn a commission. Copy the Special Link from Amazon SiteStripe and paste it unchanged');
+    }
+  }
+
+
   // ---------- Site settings ----------
   const site = loadSite(root);
   if (site.error) {
@@ -141,6 +185,7 @@ function validate(root) {
     if (isText(d.amazonUrl)) {
       if (!isHttpsUrl(d.amazonUrl)) error(p.file, `"amazonUrl" must be a full https:// link (got "${d.amazonUrl}")`);
       else if (/placeholder/i.test(d.amazonUrl)) placeholderLinks++;
+      else checkAmazonLink(p.file, d.amazonUrl);
     }
     if (d.instagramUrl !== undefined && d.instagramUrl !== null && d.instagramUrl !== "" && !isInstagramUrl(d.instagramUrl)) {
       error(p.file, `"instagramUrl" must be an https://www.instagram.com/... link (got "${d.instagramUrl}")`);
@@ -162,6 +207,9 @@ function validate(root) {
     }
     if (Array.isArray(d.tags) && new Set(d.tags).size !== d.tags.length) warn(p.file, '"tags" contains duplicates');
     checkOptionalLengths(p.file, d, { shortDescription: 160, seoTitle: 70, seoDescription: 170 });
+    for (const field of ["title", "shortDescription", "description", "seoTitle", "seoDescription"]) checkClaims(p.file, field, d[field]);
+    if (Array.isArray(d.features)) d.features.forEach((feature) => checkClaims(p.file, "features", feature));
+    checkClaims(p.file, "note (text below the front matter)", p.body);
   }
   if (placeholderLinks > 0) {
     warn("content/products", `${placeholderLinks} product(s) still use placeholder Amazon links - replace with your Special Links before launch (Session 27)`);
@@ -189,6 +237,8 @@ function validate(root) {
       else d.relatedProducts.forEach((slug) => { if (!slugs.has(slug)) error(g.file, `relatedProducts: no product with slug "${slug}"`); });
     }
     checkOptionalLengths(g.file, d, { seoTitle: 70, seoDescription: 170 });
+    for (const field of ["title", "description", "seoTitle", "seoDescription"]) checkClaims(g.file, field, d[field]);
+    checkClaims(g.file, "article text", g.body);
   }
 
   const counts = { products: products.filter((p) => p.isMarkdown).length, categories: categories.filter((c) => c.isJson).length, guides: guides.filter((g) => g.isMarkdown).length };

@@ -1,7 +1,7 @@
 // Turns validated content into the objects the build and the browser use.
 // Rule: products with draft: true or archived: true are never published.
 const { url } = require("./lib");
-const { loadProducts, loadCategories, loadSite } = require("./content");
+const { loadProducts, loadGuides, loadCategories, loadSite } = require("./content");
 
 function toProduct(entry) {
   const d = entry.data;
@@ -44,6 +44,25 @@ function toCategory(d) {
   };
 }
 
+function toGuide(entry) {
+  const d = entry.data;
+  return {
+    title: d.title,
+    slug: d.slug,
+    description: d.description,
+    date: String(d.date),
+    seoTitle: d.seoTitle || "",
+    seoDescription: d.seoDescription || "",
+    relatedProducts: d.relatedProducts || [],
+    body: entry.body,
+    draft: d.draft === true,
+    sitePath: `/guide/${d.slug}/`,
+  };
+}
+
+const guideNewest = (a, b) => Date.parse(b.date) - Date.parse(a.date) || a.title.localeCompare(b.title);
+
+
 // Newest first; same date -> A to Z
 const byNewest = (a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt) || a.title.localeCompare(b.title);
 const byOrder = (a, b) => a.order - b.order || a.name.localeCompare(b.name);
@@ -58,7 +77,15 @@ function loadModel(root) {
     draft: all.filter((p) => p.draft).length,
     archived: all.filter((p) => p.archived && !p.draft).length,
   };
-  return { site, categories, products, hidden };
+
+  // Guides: drafts are never published
+  const guides = loadGuides(root)
+    .filter((e) => e.isMarkdown && e.data)
+    .map(toGuide)
+    .filter((g) => !g.draft)
+    .sort(guideNewest);
+
+  return { site, categories, products, guides, hidden };
 }
 
 // Browser data: only what cards and search need. URLs already include the base path.

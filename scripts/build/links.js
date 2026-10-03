@@ -12,4 +12,10 @@ function externalLink({ href, html, className = "" }) {
   return `<a${cls} href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">${html}<span class="visually-hidden"> (opens in a new tab)</span></a>`;
 }
 
-module.exports = { amazonLink, externalLink };
+// Amazon addresses: amazon.<country>, amzn.<tld> short links, and a.co
+const AMAZON_HOST = /(^|\.)amazon\.[a-z.]+$|^amzn\.[a-z]+$|^a\.co$/i;
+const SHORT_AMAZON_HOST = /^(amzn\.[a-z]+|a\.co)$/i;
+const isAmazonHost = (hostname) => AMAZON_HOST.test(hostname);
+const isShortAmazonHost = (hostname) => SHORT_AMAZON_HOST.test(hostname);
+
+module.exports = { amazonLink, externalLink, isAmazonHost, isShortAmazonHost };
