@@ -35,3 +35,52 @@
 @media (min-width: 52em) {
   .listing__title { font-size: var(--text-3xl, var(--text-2xl)); }
 }
+
+
+/* Shop filter bar. Hidden until js/filters.js runs, so visitors without JavaScript
+   see a clean page. The rule below makes the hidden attribute win over display: grid/flex. */
+.listing [hidden] { display: none !important; }
+
+.filter-bar {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: var(--space-3) var(--space-4);
+  align-items: end;
+  margin-bottom: var(--space-5);
+  padding: var(--space-4);
+  background: var(--color-surface);
+  border: var(--border-thin);
+  border-radius: var(--radius-lg);
+}
+.filter-bar__field { display: grid; gap: var(--space-1, 0.25rem); min-width: 0; }
+.filter-bar__label { font-size: var(--text-sm); color: var(--color-text-muted); }
+
+.filter-bar__select {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0 var(--space-3);
+  font: inherit;
+  color: var(--color-text);
+  background: var(--color-bg);
+  border: var(--border-thin);
+  border-radius: var(--radius-md, var(--radius-lg));
+}
+.filter-bar__select:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+
+/* Big enough to tap comfortably on a phone */
+.filter-bar__check {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: 2.75rem;
+  cursor: pointer;
+}
+.filter-bar__check input { width: 1.25rem; height: 1.25rem; flex-shrink: 0; accent-color: var(--color-accent); }
+
+.filter-bar__status {
+  grid-column: 1 / -1;
+  margin: 0;
+  min-height: 1.25em;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
