@@ -2,6 +2,8 @@
 // Nothing here shows prices, ratings, stock or discounts (we never have verified data for them).
 const { basePath, url, escapeHtml, render, readText } = require("./lib");
 const { amazonLink, externalLink } = require("./links");
+const { productGrid } = require("./components");
+const { relatedProducts } = require("./related");
 
 // Splits plain text into paragraphs (blank line = new paragraph). All text is escaped.
 function paragraphs(text) {
@@ -87,6 +89,17 @@ function instagram(product) {
   return `          <p class="product__instagram">Seen this on Instagram? ${link}</p>`;
 }
 
+// "Related finds" block. Returns an empty string when nothing is related,
+// so the page never shows an empty heading.
+function relatedSection(product, model) {
+  const items = relatedProducts(product, model.products);
+  if (items.length === 0) return "";
+  return `<section class="related" aria-labelledby="related-heading">
+        <h2 class="product__heading" id="related-heading">Related finds</h2>
+${productGrid(items, model.categories)}
+      </section>`;
+}
+
 function renderProductPage(product, model) {
   const category = model.categories.find((c) => c.slug === product.category);
   const hasGallery = product.additionalImages.length > 0;
@@ -104,7 +117,7 @@ function renderProductPage(product, model) {
       note: note(product),
       cta: cta(product, model.site),
       instagram: instagram(product),
-      related: "", // "Related finds" is added in Session 11
+      related: relatedSection(product, model),
       guide: "", // "Read the guide" is added in Session 12
     },
     "pages/product/content.html"

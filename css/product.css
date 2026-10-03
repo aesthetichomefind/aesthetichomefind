@@ -54,3 +54,11 @@
 @media (min-width: 40em) {
   .product__cta .btn { width: auto; align-self: flex-start; padding-inline: var(--space-6); }
 }
+
+
+/* Related finds (bottom of a product page) */
+.related {
+  margin-top: var(--space-7);
+  padding-top: var(--space-6);
+  border-top: var(--border-thin);
+}
