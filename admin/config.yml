@@ -1,0 +1,137 @@
+# Admin panel settings (Sveltia CMS, same format as Decap CMS).
+# Every save creates a commit on the main branch, and GitHub Actions deploys it.
+
+backend:
+  name: github
+  repo: aesthetichomefind/aesthetichomefind
+  branch: main
+
+publish_mode: simple
+site_url: https://aesthetichomefind.github.io/aesthetichomefind/
+locale: en
+
+# Default place for uploaded images. Product photos go here.
+media_folder: assets/images/products
+public_folder: /assets/images/products
+
+collections:
+  # ---------------------------------------------------------------- Products
+  - name: products
+    label: Products
+    label_singular: Product
+    folder: content/products
+    extension: md
+    format: yaml-frontmatter
+    create: true
+    delete: false # never delete: tick "Archived" instead (the file stays for history)
+    slug: "{{fields.slug}}"
+    identifier_field: title
+    summary: "{{title}}"
+    sortable_fields: [title, publishedAt]
+    fields:
+      - { label: Title, name: title, widget: string }
+      - label: Category
+        name: category
+        widget: relation
+        collection: categories
+        search_fields: [name]
+        value_field: slug
+        display_fields: [name]
+      - label: Photo
+        name: image
+        widget: image
+        hint: "Square photo, about 1200 px, JPG or WebP, under 300 KB. Use your own photo or one you have permission to use. Do not save images from Amazon pages."
+      - label: Photo description (alt text)
+        name: altText
+        widget: string
+        hint: "Describe what is in the photo, for people who cannot see it. Example: Bamboo organizer with three compartments on a kitchen counter."
+      - label: Description
+        name: description
+        widget: text
+        hint: "Write it in your own words. No prices, ratings, discounts, stock claims or invented experiences."
+      - label: Amazon link
+        name: amazonUrl
+        widget: string
+        pattern: ["^https://", "Paste the full Amazon Special Link, starting with https://"]
+        hint: "Paste the Special Link exactly as Amazon gives it. Never edit or build it yourself."
+      - label: Instagram post link (optional)
+        name: instagramUrl
+        widget: string
+        required: false
+        pattern: ["^https://(www\\.)?instagram\\.com/", "Must be an instagram.com link"]
+      - { label: Featured on the homepage, name: featured, widget: boolean, default: false }
+      - label: Page address name (slug)
+        name: slug
+        widget: string
+        pattern: ["^[a-z0-9]+(-[a-z0-9]+)*$", "Use only lowercase letters, numbers and hyphens, for example bamboo-kitchen-organizer"]
+        hint: "Becomes the page address and the file name. Choose it once and do not change it later."
+      - { label: ID, name: id, widget: compute, value: "{{fields.slug}}" }
+      - label: Date published
+        name: publishedAt
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        default: "{{now}}"
+      - label: Short description (optional)
+        name: shortDescription
+        widget: string
+        required: false
+        pattern: ["^.{0,160}$", "Up to 160 characters"]
+        hint: "Shown on the product card. Up to 160 characters."
+      - label: Key features (optional)
+        name: features
+        widget: list
+        required: false
+        field: { label: Feature, name: feature, widget: string }
+      - label: Why it caught our attention (optional)
+        name: body
+        widget: text
+        required: false
+        hint: "A few honest sentences. A blank line starts a new paragraph. Do not claim you tested it unless you did."
+      - label: Tags (optional)
+        name: tags
+        widget: list
+        required: false
+        field: { label: Tag, name: tag, widget: string }
+      - label: Badge (optional)
+        name: badge
+        widget: select
+        options: ["New", "Featured"]
+        required: false
+      - label: More photos (optional)
+        name: additionalImages
+        widget: list
+        required: false
+        field: { label: Photo, name: image, widget: image }
+      - { label: Search title (optional), name: seoTitle, widget: string, required: false, hint: "Up to 70 characters." }
+      - { label: Search description (optional), name: seoDescription, widget: text, required: false, hint: "Up to 170 characters." }
+      - { label: Draft (hide for now), name: draft, widget: boolean, default: false }
+      - { label: Archived (remove from the site), name: archived, widget: boolean, default: false }
+
+  # -------------------------------------------------------------- Categories
+  - name: categories
+    label: Categories
+    label_singular: Category
+    folder: content/categories
+    extension: json
+    format: json
+    create: true
+    delete: false
+    slug: "{{fields.slug}}"
+    identifier_field: name
+    summary: "{{name}}"
+    media_folder: /assets/images/categories
+    public_folder: /assets/images/categories
+    fields:
+      - { label: Name, name: name, widget: string }
+      - label: Page address name (slug)
+        name: slug
+        widget: string
+        pattern: ["^[a-z0-9]+(-[a-z0-9]+)*$", "Use only lowercase letters, numbers and hyphens"]
+        hint: "Becomes the page address. Do not change it later."
+      - { label: Description, name: description, widget: text }
+      - { label: Order, name: order, widget: number, value_type: int, min: 1, hint: "1 shows first." }
+      - { label: Photo (optional), name: image, widget: image, required: false }
+      - { label: Search title (optional), name: seoTitle, widget: string, required: false }
+      - { label: Search description (optional), name: seoDescription, widget: text, required: false }

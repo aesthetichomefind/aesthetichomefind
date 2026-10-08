@@ -20,6 +20,8 @@ const { renderGuidesIndex, renderGuidePage } = require("./guide-pages");
 const { auditLinks } = require("./check-links");
 const { cleanDir, writePage, writeJson, copyFolders, copyFile } = require("./output");
 
+const { copyAdmin } = require('./copy-admin');
+
 const args = process.argv.slice(2);
 const strict = args.includes("--strict");
 const withStyleguide = args.includes("--styleguide");
@@ -93,6 +95,7 @@ writeJson(dist, "data/categories.json", toClientCategories(model.categories, mod
 
 // 5) Static files
 copyFolders(root, dist, ["css", "js", "assets"]);
+copyAdmin();
 if (withStyleguide) {
   copyFile(path.join(__dirname, "dev", "style-reference.html"), dist, "style-reference/index.html");
   console.log("Dev: /style-reference/ included");
