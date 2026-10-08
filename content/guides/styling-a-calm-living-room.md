@@ -1,5 +1,5 @@
 ---
-title: Sample: Styling a Calm Living Room
+title: "Sample: Styling a Calm Living Room"
 slug: styling-a-calm-living-room
 description: Sample guide text about creating a calm, warm living room. Not final content.
 date: 2026-10-02

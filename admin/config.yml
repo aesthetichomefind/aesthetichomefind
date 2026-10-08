@@ -8,7 +8,6 @@ backend:
 
 publish_mode: simple
 site_url: https://aesthetichomefind.github.io/aesthetichomefind/
-locale: en
 
 # Default place for uploaded images. Product photos go here.
 media_folder: assets/images/products
@@ -166,3 +165,57 @@ collections:
             widget: string
             pattern: ["^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", "Enter a valid email address"]
             hint: "Shown on the Contact page."
+  
+  
+  # ------------------------------------------------------------------ Guides
+  - name: guides
+    label: Guides
+    label_singular: Guide
+    folder: content/guides
+    extension: md
+    format: yaml-frontmatter
+    create: true
+    delete: false # never delete: keep "Draft" on to hide a guide
+    slug: "{{fields.slug}}"
+    identifier_field: title
+    summary: "{{title}}"
+    sortable_fields: [title, date]
+    fields:
+      - { label: Title, name: title, widget: string }
+      - label: Page address name (slug)
+        name: slug
+        widget: string
+        pattern: ["^[a-z0-9]+(-[a-z0-9]+)*$", "Use only lowercase letters, numbers and hyphens, for example small-kitchen-organization"]
+        hint: "Becomes the page address and the file name. Choose it once and do not change it later."
+      - label: Short description
+        name: description
+        widget: text
+        hint: "One or two sentences shown on guide cards and in search results. Write it in your own words."
+      - label: Date
+        name: date
+        widget: datetime
+        date_format: "YYYY-MM-DD"
+        time_format: false
+        format: "YYYY-MM-DD"
+        default: "{{now}}"
+      - label: Related products (optional)
+        name: relatedProducts
+        widget: relation
+        collection: products
+        search_fields: [title]
+        value_field: slug
+        display_fields: [title]
+        multiple: true
+        required: false
+        hint: "Products mentioned in the guide. They appear as 'Related finds' under the guide, and the guide is linked from those product pages."
+      - label: Article
+        name: body
+        widget: markdown
+        modes: [rich_text, raw]
+        buttons: [bold, italic, link, heading-two, heading-three, bulleted-list, numbered-list, quote]
+        editor_components: []
+        hint: "Use headings, short paragraphs and lists. Images and tables are not supported yet. Write only what is true: no prices, ratings, discounts, or claims that you tested something unless you did. The Amazon disclosure is added automatically."
+      - { label: Search title (optional), name: seoTitle, widget: string, required: false, hint: "Up to 70 characters." }
+      - { label: Search description (optional), name: seoDescription, widget: text, required: false, hint: "Up to 170 characters." }
+      - { label: Draft (keep hidden until ready), name: draft, widget: boolean, default: true }
+

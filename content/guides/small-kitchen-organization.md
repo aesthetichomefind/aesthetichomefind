@@ -1,5 +1,5 @@
 ---
-title: Sample: Small Kitchen Organization Ideas
+title: "Sample: Small Kitchen Organization Ideas"
 slug: small-kitchen-organization
 description: Sample guide text with a few general ideas for keeping a small kitchen tidy. Not final content.
 date: 2026-10-03
