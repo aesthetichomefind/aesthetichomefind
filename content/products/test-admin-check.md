@@ -18,5 +18,5 @@ additionalImages: []
 seoTitle: ''
 seoDescription: ''
 draft: false
-archived: false
+archived: true
 ---
