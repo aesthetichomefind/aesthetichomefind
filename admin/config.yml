@@ -135,3 +135,34 @@ collections:
       - { label: Photo (optional), name: image, widget: image, required: false }
       - { label: Search title (optional), name: seoTitle, widget: string, required: false }
       - { label: Search description (optional), name: seoDescription, widget: text, required: false }
+
+  
+  # ----------------------------------------------------------- Site settings
+  - name: settings
+    label: Site settings
+    files:
+      - name: site
+        label: Site settings
+        file: data/site.json
+        format: json
+        fields:
+          - { label: Brand name, name: brandName, widget: string }
+          - { label: Tagline, name: tagline, widget: string, hint: "Short line shown on the homepage and in search results." }
+          - { label: Site description, name: description, widget: text, hint: "One or two sentences. Used as the default description for search engines." }
+          - label: Instagram handle
+            name: instagramHandle
+            widget: string
+            pattern: ["^@[A-Za-z0-9._]+$", "Start with @, for example @AestheticHomeFind"]
+          - label: Instagram profile link
+            name: instagramUrl
+            widget: string
+            pattern: ["^https://(www\\.)?instagram\\.com/", "Must be an instagram.com link"]
+          - label: Amazon Associate disclosure
+            name: amazonDisclosure
+            widget: string
+            hint: "Required wording. Only change it if the Amazon Associates agreement changes. It appears in the footer and on product pages and guides."
+          - label: Contact email
+            name: contactEmail
+            widget: string
+            pattern: ["^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$", "Enter a valid email address"]
+            hint: "Shown on the Contact page."
