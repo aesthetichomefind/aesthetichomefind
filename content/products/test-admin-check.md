@@ -4,7 +4,7 @@ category: kitchen
 image: /assets/images/products/test-admin-check.png
 altText: Test photo for checking the admin panel
 description: This is a test product used to check the admin panel. It will not be published.
-amazonUrl: "https://www.amazon.com/dp/SAMPLE-PLACEHOLDER"
+amazonUrl: https://www.amazon.com/dp/SAMPLE-PLACEHOLDER
 instagramUrl: ''
 featured: false
 slug: test-admin-check
@@ -17,6 +17,6 @@ badge: ''
 additionalImages: []
 seoTitle: ''
 seoDescription: ''
-draft: true
+draft: false
 archived: false
 ---
